@@ -1,0 +1,27 @@
+hosts: localhost
+  connection: local
+  sudo: yes
+  tasks:
+
+  — name: Install list of packages
+    apt: name={{item}} state=installed
+    with_items:
+      — htop
+      — ctop
+      — screen
+      — unzip
+      — curl
+      — sudo
+      — mtr
+      — bash-completion
+      — tree
+      — colordiff
+      — ntp
+      — bwm-ng
+      — docker-compose
+      — apt-transport-https
+
+  — name: Docker running?
+    command: curl localhost:80
+    register: out
+  — debug: var=out.stdout_lines
