@@ -1,5 +1,7 @@
 Few Tips
 
+For the latest version, go to: https://github.com/phanclan/packer-ext
+
 packer validate template.json
 packer inspect template.json
 
