@@ -7,7 +7,7 @@ CONSUL_TEMPLATE_VERSION=0.25.0
 ENVCONSUL_VERSION=0.9.3
 DOCKER_COMPOSE_VERSION=1.25.0
 
-sleep 30
+# sleep 30
 sudo apt-get update
 #sudo apt-get install -qq redis-server
 echo "[*] Install base"
