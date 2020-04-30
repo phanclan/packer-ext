@@ -2,8 +2,6 @@
 set -x
 
 echo "[*] Install dnsmasq"
-sudo apt-get update
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq default-jdk
 
 YUM=$(which yum 2>/dev/null)
 APT_GET=$(which apt-get 2>/dev/null)
