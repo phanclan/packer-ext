@@ -11,8 +11,8 @@ DOCKER_COMPOSE_VERSION=1.25.0
 # sleep 30
 echo "[*] Install base"
 sudo apt-get update
-sudo apt-get install -qq jq unzip tree curl vim wget git pv make nginx
-sudo apt-get install -qq dnsutils iputils-ping net-tools netcat resolvconf
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq jq unzip tree curl vim wget git pv make nginx
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq dnsutils iputils-ping net-tools netcat resolvconf
 
 echo "[*] Install cloud tools"
 sudo apt-get install -qq awscli
@@ -28,8 +28,7 @@ curl -s -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFO
 
 install_from_zip() {
   cd /tmp
-  sudo unzip -qqo -d /usr/local/bin "/tmp/${1}.zip"
-  sudo chmod +x "/usr/local/bin/${1}"
+  sudo unzip -qqo -d /usr/local/bin "/tmp/${1}.zip" && sudo chmod +x "/usr/local/bin/${1}"
   # rm -rf "${1}.zip"
 }
 
@@ -48,18 +47,6 @@ nomad -autocomplete-install
 echo "#--> Create folders"
 sudo mkdir -p /vault/logs /consul /nomad /terraform
 sudo chown -R ubuntu:ubuntu /vault /consul /nomad /terraform
-
-echo "[*] Install docker"
-sudo apt-get install -qq apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get update
-sudo apt-get install -qq docker-ce
-sudo usermod -aG docker $USER
-
-echo "[*] Install docker-compose"
-sudo curl -sL https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
 
 echo "[*] Running build."
 # sudo apt-get install -y python-dev python-pip
