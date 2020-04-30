@@ -44,6 +44,10 @@ nomad -autocomplete-install
 echo "#--> Create folders"
 sudo mkdir -p /vault/logs /consul /nomad /terraform
 sudo chown -R ubuntu:ubuntu /vault /consul /nomad /terraform
+sudo mkdir -p /etc/nomad.d
+sudo chmod a+w /etc/nomad.d
+sudo mkdir -p /etc/consul.d
+sudo chmod a+w /etc/consul.d
 
 echo "[*] Running build."
 # sudo apt-get install -y python-dev python-pip
