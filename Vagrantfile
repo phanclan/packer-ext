@@ -95,6 +95,8 @@ Vagrant.configure("2") do |config|
           #----- Enable provisioning with a shell script.
           # ubuntu.vm.provision "file", source: "../files/.bash_aliases", destination: "~/.bash_aliases"
           ubuntu.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install.sh | sh -"
+          ubuntu.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install-docker.sh | sh -"
+          ubuntu.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install-dnsmasq.sh | sh -"
           # ubuntu.vm.provision "shell", path: "../provisioners/base-install.sh"
           # ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
           # ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
