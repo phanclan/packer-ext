@@ -10,7 +10,7 @@ sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq docker-ce
 sudo service docker restart
 sudo usermod -aG docker $USER
 sudo usermod -aG docker vagrant
-sudo usermod -aG docker ubuntu
+sudo usermod -aG docker ubuntu || true
 
 # echo "[*] Install docker-compose"
 # sudo curl -sL https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose

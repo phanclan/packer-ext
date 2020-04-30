@@ -117,5 +117,28 @@ Vagrant.configure("2") do |config|
       end
       # config.vm.provision "shell",  path: "install-bash.sh"
   end
+  (1..2).each do |i|
+    config.vm.define "client-#{i}" do |ubuntu|
+        ubuntu.vm.box = "bento/ubuntu-18.04"
+        ubuntu.vm.hostname = "client-#{i}"
+
+        #==> Setup Networking
+        ubuntu.vm.network "private_network", ip: "192.168.50.10#{i}"
+
+        #==> Share an additional folder to the guest VM.
+        ubuntu.vm.synced_folder "..", "/vagrant"
+
+        ubuntu.vm.provider "virtualbox" do |vb|
+          vb.memory = "1024"
+        end
+
+        #----- Enable provisioning with a shell script.
+        # ubuntu.vm.provision "file", source: "../files/.bash_aliases", destination: "~/.bash_aliases"
+        ubuntu.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install.sh | sh -"
+        ubuntu.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install-docker.sh | sh -"
+        ubuntu.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install-dnsmasq.sh | sh -"
+    end
+    # config.vm.provision "shell",  path: "install-bash.sh"
+end
 
 end
