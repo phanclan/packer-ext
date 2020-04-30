@@ -32,12 +32,9 @@ install_from_zip() {
   # rm -rf "${1}.zip"
 }
 
-for i in terraform vault consul nomad; do
+for i in terraform vault consul nomad consul-template envconsul; do
 install_from_zip $i
 done
-
-install_from_zip consul-template
-install_from_zip envconsul
 
 terraform -install-autocomplete
 vault -autocomplete-install
