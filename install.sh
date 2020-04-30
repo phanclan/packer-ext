@@ -9,13 +9,14 @@ ENVCONSUL_VERSION=0.9.3
 DOCKER_COMPOSE_VERSION=1.25.0
 
 # sleep 30
-sudo apt-get update
-#sudo apt-get install -qq redis-server
 echo "[*] Install base"
+sudo apt-get update
 sudo apt-get install -qq jq unzip tree curl vim wget git pv make nginx
-sudo apt-get install -qq dnsutils iputils-ping net-tools netcat
+sudo apt-get install -qq dnsutils iputils-ping net-tools netcat resolvconf
+
 echo "[*] Install cloud tools"
 sudo apt-get install -qq awscli
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 echo "[*] Install HashiCorp"
 curl -s -o /tmp/vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}+ent/vault_${VAULT_VERSION}+ent_linux_amd64.zip
@@ -39,6 +40,7 @@ done
 install_from_zip consul-template
 install_from_zip envconsul
 
+terraform -install-autocomplete
 vault -autocomplete-install
 consul -autocomplete-install
 nomad -autocomplete-install

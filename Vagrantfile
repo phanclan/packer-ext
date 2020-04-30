@@ -1,5 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+# Get the latest version here: https://raw.githubusercontent.com/phanclan/packer-ext/master/Vagrantfile
 
 #----- Variables
 
@@ -49,7 +50,6 @@ Vagrant.configure("2") do |config|
       hashistack.vm.hostname = "hashistack"
 
       #----- Setup Networking
-      #hashistack.vm.network "public_network"
       hashistack.vm.network "private_network", ip: private_ip
       hashistack.vm.network "forwarded_port", guest: 8000, host: 8000
       hashistack.vm.network "forwarded_port", guest: 8080, host: 8080
@@ -74,47 +74,46 @@ Vagrant.configure("2") do |config|
       hashistack.vm.provision "shell", inline: $USERSCRIPT
   end
   (1..3).each do |i|
-      config.vm.define "ubuntu-#{i}" do |ubuntu|
+      config.vm.define "server-#{i}" do |ubuntu|
           ubuntu.vm.box = "bento/ubuntu-18.04"
-          # ubuntu.vm.box_check_update = false
-          ubuntu.vm.hostname = "ubuntu-#{i}"
+          ubuntu.vm.hostname = "server-#{i}"
 
-          #----- Setup Networking
-          #ubuntu.vm.network "public_network"
-          # ubuntu.vm.network "forwarded_port", guest: 80, host: "808#{i}"
+          #==> Setup Networking
           ubuntu.vm.network "private_network", ip: "192.168.50.10#{i}"
           # ubuntu.vm.provision :hosts, sync_hosts: true
+          # ubuntu.vm.network "forwarded_port", guest: 80, host: "808#{i}"
           # ubuntu.vm.network "forwarded_port", guest: 8500, host: 850#{i} # Consul
 
-          #----- Share an additional folder to the guest VM.
+          #==> Share an additional folder to the guest VM.
           ubuntu.vm.synced_folder "..", "/vagrant"
           # ubuntu.vm.synced_folder "./vagrant_data", "/vagrant_data" # Need folder
 
           ubuntu.vm.provider "virtualbox" do |vb|
-            vb.gui = false
             vb.memory = "1024"
           end
 
           #----- Enable provisioning with a shell script.
           ubuntu.vm.provision "file", source: "../files/.bash_aliases", destination: "~/.bash_aliases"
-          ubuntu.vm.provision "shell", path: "../provisioners/base-install.sh"
-          ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
-          ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
-            env: {
-              "GROUP" => vault_group,
-              "USER" => vault_user,
-              "COMMENT" => vault_comment,
-              "HOME" => vault_home,
-            }
-          ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
-            env: {
-              "VERSION" => vault_version,
-              "URL" => vault_ent_url,
-              "USER" => vault_user,
-              "GROUP" => vault_group,
-            }
-          ubuntu.vm.provision "shell", inline: $vault_env
+          ubuntu.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install.sh | sh-"
+          # ubuntu.vm.provision "shell", path: "../provisioners/base-install.sh"
+          # ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
+          # ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",
+          #   env: {
+          #     "GROUP" => vault_group,
+          #     "USER" => vault_user,
+          #     "COMMENT" => vault_comment,
+          #     "HOME" => vault_home,
+          #   }
+          # ubuntu.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/vault/scripts/install-vault.sh | bash",
+          #   env: {
+          #     "VERSION" => vault_version,
+          #     "URL" => vault_ent_url,
+          #     "USER" => vault_user,
+          #     "GROUP" => vault_group,
+          #   }
+          # ubuntu.vm.provision "shell", inline: $vault_env
       end
+      # config.vm.provision "shell",  path: "install-bash.sh"
   end
 
 end
