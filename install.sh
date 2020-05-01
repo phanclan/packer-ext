@@ -20,8 +20,8 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
 echo "[*] Install HashiCorp"
 curl -s -o /tmp/vault.zip https://releases.hashicorp.com/vault/${VAULT_VERSION}+ent/vault_${VAULT_VERSION}+ent_linux_amd64.zip
-curl -s -o /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip && sudo unzip -qqo -d /usr/local/bin/ /tmp/consul.zip
-curl -s -o /tmp/nomad.zip https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip && sudo unzip -qqo -d /usr/local/bin/ /tmp/nomad.zip
+curl -s -o /tmp/consul.zip https://releases.hashicorp.com/consul/${CONSUL_VERSION}/consul_${CONSUL_VERSION}_linux_amd64.zip
+curl -s -o /tmp/nomad.zip https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip
 curl -s -o /tmp/consul-template.zip https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip
 curl -s -o /tmp/envconsul.zip https://releases.hashicorp.com/envconsul/${ENVCONSUL_VERSION}/envconsul_${ENVCONSUL_VERSION}_linux_amd64.zip
 curl -s -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
@@ -48,6 +48,11 @@ sudo mkdir -p /etc/nomad.d
 sudo chmod a+w /etc/nomad.d
 sudo mkdir -p /etc/consul.d
 sudo chmod a+w /etc/consul.d
+# For Nomad Workshops
+sudo mkdir -p /root/nomad
+sudo chmod a+w /root/nomad
+sudo mkdir -p /root/consul
+sudo chmod a+w /root/consul
 
 echo "[*] Running build."
 # sudo apt-get install -y python-dev python-pip

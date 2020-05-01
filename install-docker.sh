@@ -9,7 +9,7 @@ sudo apt-get update
 sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq docker-ce
 sudo service docker restart
 sudo usermod -aG docker $USER
-sudo usermod -aG docker vagrant
+sudo usermod -aG docker vagrant || true
 sudo usermod -aG docker ubuntu || true
 
 # echo "[*] Install docker-compose"
