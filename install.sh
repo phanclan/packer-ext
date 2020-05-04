@@ -48,11 +48,6 @@ sudo mkdir -p /etc/nomad.d
 sudo chmod a+w /etc/nomad.d
 sudo mkdir -p /etc/consul.d
 sudo chmod a+w /etc/consul.d
-# For Nomad Workshops
-sudo mkdir -p /root/nomad
-sudo chmod a+w /root/nomad
-sudo mkdir -p /root/consul
-sudo chmod a+w /root/consul
 
 echo "[*] Running build."
 # sudo apt-get install -y python-dev python-pip
