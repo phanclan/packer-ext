@@ -7,7 +7,7 @@
 
 # MISCELLANEOUS files
 .vagrant
-nomad
+# nomad
 # vault
 # consul
 consul/logs/*
