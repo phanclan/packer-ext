@@ -1,4 +1,5 @@
 #!/bin/sh -x
+set -x
 # For Nomad Workshops
 sudo mkdir -p /root/nomad
 sudo chmod a+w /root/nomad
