@@ -14,3 +14,9 @@ packer build httpd.json 2>&1 | sudo tee output.txt
 ```
 tail -2 output.txt | head -2 | awk 'match($0, /ami-.*/) { print substr($0, RSTART, RLENGTH) }' > sudo ami.txt
 ```
+
+
+Pointing to a local vagrant box
+```
+vagrant box add my-box file:///d:/path/to/file.box
+```

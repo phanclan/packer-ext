@@ -4,11 +4,9 @@
 
 #==> Variables
 # Networking
-private_ip = ENV['PRIVATE_IP'] || "192.168.50.100"
 consul_host_port = ENV['CONSUL_HOST_PORT'] || 8500
 vault_host_port = ENV['VAULT_HOST_PORT'] || 8200
 nomad_host_port = ENV['NOMAD_HOST_PORT'] || 4646
-ubuntu_private_ip1 = "192.168.50.16"
 
 # Vault variables
 vault_version = ENV['VAULT_VERSION'] || "1.2.3"
@@ -28,7 +26,8 @@ VAULT_ENV
 Vagrant.configure("2") do |config|
   config.vm.box = "bento/ubuntu-18.04"
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = "1024"
+    vb.cpus = "1"
+    vb.memory = "1536"
   end
 
   # still needed?
@@ -36,19 +35,11 @@ Vagrant.configure("2") do |config|
     # hashistack.vm.box_check_update = false
     hashistack.vm.hostname = "hashistack"
     #----- Setup Networking
-    hashistack.vm.network "private_network", ip: private_ip
     hashistack.vm.network "forwarded_port", guest: 8000, host: 8000
     hashistack.vm.network "forwarded_port", guest: 8080, host: 8080
-    hashistack.vm.network "forwarded_port", guest: 8500, host: 8500 # Consul
-    hashistack.vm.network "forwarded_port", guest: 8200, host: 8200 # Vault
-    hashistack.vm.network "forwarded_port", guest: 4646, host: 4646 # Nomad
     #----- Share an additional folder to the guest VM.
     hashistack.vm.synced_folder "..", "/vagrant"
     #hashistack.vm.synced_folder "./vagrant_data", "/vagrant_data" # Need folder
-    hashistack.vm.provider "virtualbox" do |vb|
-      vb.memory = "4096"
-      vb.cpus = "2"
-    end
     #----- Enable provisioning with a shell script.
     hashistack.vm.provision "file", source: "../files/.bash_aliases", destination: "~/.bash_aliases"
     hashistack.vm.provision "shell", path: "../provisioners/base-install.sh"
@@ -57,12 +48,14 @@ Vagrant.configure("2") do |config|
 
   # 3-node config - Region A Servers
   (1..3).each do |i|
-    config.vm.define "server-#{i}" do |u|
-      u.vm.hostname = "server-#{i}"
+    config.vm.define "server-a-#{i}" do |u|
+      u.vm.hostname = "server-a-#{i}"
       #==> Setup Networking
       u.vm.network "private_network", ip: "192.168.50.#{i+100}"
       if i == 1
-        u.vm.network "forwarded_port", guest: 4646, host: "#{i+4645}"
+        u.vm.network "forwarded_port", guest: 8500, host: "#{i+8499}", auto_correct: true # Consul
+        u.vm.network "forwarded_port", guest: 8200, host: "#{i+8199}", auto_correct: true # Vault
+        u.vm.network "forwarded_port", guest: 4646, host: "#{i+4645}", auto_correct: true # Nomad
       end
       # u.vm.provision :hosts, sync_hosts: true
       #==> Share an additional folder to the guest VM.
@@ -70,9 +63,9 @@ Vagrant.configure("2") do |config|
       # u.vm.synced_folder "./vagrant_data", "/vagrant_data" # Need folder
       #==> Enable provisioning with a shell script.
       # u.vm.provision "file", source: "../files/.bash_aliases", destination: "~/.bash_aliases"
-      u.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install.sh | sh -"
-      u.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install-docker.sh | sh -"
-      u.vm.provision "shell", inline: "curl -sfL https://raw.githubusercontent.com/phanclan/packer-ext/master/install-dnsmasq.sh | sh -"
+      u.vm.provision "shell", path: "../install.sh"
+      u.vm.provision "shell", path: "../install-docker.sh"
+      u.vm.provision "shell", path: "../install-dnsmasq.sh"
       # u.vm.provision "shell", path: "../provisioners/base-install.sh"
       # u.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/base.sh | bash"
       # u.vm.provision "shell", inline: "curl https://raw.githubusercontent.com/hashicorp/guides-configuration/master/shared/scripts/setup-user.sh | bash",

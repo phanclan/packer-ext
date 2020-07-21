@@ -2,11 +2,11 @@
 set -x
 
 echo "[*] Install docker"
-sudo apt-get install -qq apt-transport-https ca-certificates curl software-properties-common
+sudo apt-get install -qq apt-transport-https ca-certificates curl software-properties-common > /dev/null
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get update
-sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq docker-ce
+sudo apt-get update > /dev/null
+sudo DEBIAN_FRONTEND=noninteractive apt-get install -qq docker-ce > /dev/null
 sudo service docker restart
 sudo usermod -aG docker $USER
 sudo usermod -aG docker vagrant || true

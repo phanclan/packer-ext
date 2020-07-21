@@ -29,9 +29,9 @@
       },
       "instance_type": "t3.large",
       "ssh_username": "ubuntu",
-      "ami_name": "pphan {{timestamp}}",
+      "ami_name": "{{user `prefix`}} {{timestamp}}",
       "tags": {
-        "Name": "pphan {{timestamp}}",
+        "Name": "{{user `prefix`}} {{timestamp}}",
         "Env": "demo"
       }
     }
@@ -50,8 +50,9 @@
       "type": "shell",
       "scripts": [
         "install.sh",
-        "post_install.sh"
+        "install-docker.sh"
       ]
     }
-  ]
+  ],
+  "post-processors": ["vagrant"]
 }
